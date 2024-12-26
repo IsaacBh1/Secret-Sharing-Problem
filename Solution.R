@@ -1,3 +1,19 @@
+# Install and load the 'numbers' package for prime number functions
+if (!require("numbers")) install.packages("numbers")
+library(numbers)
+
+# Function to generate a prime number with more than 5 digits
+generate_large_prime <- function() {
+  while (TRUE) {
+    # Generate a random number with more than 5 digits (100000 to 999999)
+    candidate <- sample(100000:999999, 1)
+    # Check if the number is prime
+    if (isPrime(candidate)) {
+      return(candidate)
+    }
+  }
+}
+
 # Function to compute modular inverse
 mod_inv <- function(a, p) {
   a <- a %% p
@@ -40,8 +56,11 @@ reconstruct_secret <- function(x, y, t, p) {
 
 # Main program
 {
+  # Generate a prime number with more than 5 digits
+  p <- generate_large_prime()
+  print(paste("Generated prime number p:", p))
+  
   # Input parameters
-  p <- as.integer(readline("Enter prime number p: "))
   s <- as.integer(readline("Enter secret s: "))
   n <- as.integer(readline("Enter number of parties n: "))
   t <- as.integer(readline("Enter threshold t: "))
@@ -49,6 +68,13 @@ reconstruct_secret <- function(x, y, t, p) {
   # Generate polynomial coefficients
   set.seed(123)
   coefficients <- c(s, sample(0:(p-1), t-1, replace = TRUE))
+  
+  # Display the polynomial
+  polynomial <- paste("p(x) =", coefficients[1])
+  for (i in 2:length(coefficients)) {
+    polynomial <- paste(polynomial, "+", coefficients[i], "* x^", i-1)
+  }
+  print(paste("Polynomial:", polynomial))
   
   # Evaluate polynomial
   evaluate_poly <- function(x, coeffs, p) {
@@ -75,18 +101,14 @@ reconstruct_secret <- function(x, y, t, p) {
   # Output results
   print(paste("Reconstructed Secret:", secret_reconstructed))
   
-  # Plotting (optional)
-  plot_shares <- function(p, coefficients, shares) {
-    x_plot <- 0:(p-1)
-    y_plot <- sapply(x_plot, evaluate_poly, coeffs = coefficients, p = p)
-    plot(x_plot, y_plot, type = "p", pch = 19, col = "blue", 
-         xlab = "x", ylab = "p(x)", 
-         main = "Shamir's Secret Sharing with Newton's Divided Differences")
-    points(shares$x, shares$y, pch = 19, col = "red")
-    legend("topright", legend = c("Polynomial", "Shares"), 
-           pch = c(1, 1), col = c("blue", "red"))
-  }
-  
-  # Call plotting function
-  plot_shares(p, coefficients, shares)
+  # Plotting
+  x_plot <- seq(0, p-1, length.out = 1000)
+  y_plot <- sapply(x_plot, evaluate_poly, coeffs = coefficients, p = p)
+  plot(x_plot, y_plot, type = "l", col = "blue", 
+       xlab = "x", ylab = "p(x)", 
+       main = "Shamir's Secret Sharing Polynomial and Shares")
+  points(shares$x, shares$y, pch = 19, col = "red")
+  legend("topright", legend = c("Polynomial", "Shares"), 
+         col = c("blue", "red"), lty = c(1, NA), pch = c(NA, 19))
 }
+
