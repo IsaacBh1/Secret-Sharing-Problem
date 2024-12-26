@@ -53,7 +53,7 @@ The R program in this repository implements Shamir's Secret Sharing with the fol
    install.packages("numbers")
 
 ### graphical-representation
-![Local Image](images/img.png "Local Image")
+![Local Image](images/image.png "Local Image")
 
 ### video-explanation
 link : https://youtu.be/iFY5SyY3IMQ?si=Si8yz_5YX1kzEN20
