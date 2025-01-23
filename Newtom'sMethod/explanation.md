@@ -10,7 +10,7 @@ This repository provides an implementation of **Shamir's Secret Sharing** using 
 3. [R Program](#r-program)
 4. [Graphical Representation](#graphical-representation)
 5. [Resources](#resources)
-6. [Video Explanation](#video-explanation)
+6. [Video Explaination](#video-explanation)
 
 ---
 
